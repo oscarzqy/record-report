@@ -44,9 +44,12 @@ export default function ReportCollection() {
                 }`}
                 onClick={async () => {
                   try {
-                    const response = await fetch("/api/report-all/3", {
-                      method: "GET",
-                    });
+                    const response = await fetch(
+                      `/api/report-all/${personReports[0].collectionId}`,
+                      {
+                        method: "GET",
+                      }
+                    );
                     setOverallReport(await response.json());
                     setShowOverall(true);
                   } catch (error) {
