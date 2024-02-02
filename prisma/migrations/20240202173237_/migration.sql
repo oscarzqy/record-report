@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE `scenarioprogress` ADD COLUMN `runAt` DATETIME(3) NOT NULL;
+ALTER TABLE `ScenarioProgress` ADD COLUMN `runAt` DATETIME(3) NOT NULL;
