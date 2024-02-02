@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ReportCollection {
+  id      Int    @id @default(autoincrement())
+  name    String @unique
+  rawData String
+
+  createdAt     DateTime       @default(now())
+  personReports PersonReport[]
+}
+
+model PersonReport {
+  id         Int    @id @default(autoincrement())
+  personName String
+  email      String
+
+  createdAt DateTime @default(now())
+
+  CBTProgress      CBTProgress[]
+  scenarioProgress ScenarioProgress[]
+
+  collection   ReportCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  collectionId Int
+
+  @@unique(name: "unique_collectionId_personEmail", [email, collectionId])
+}
+
+model CBTProgress {
+  id          Int       @id @default(autoincrement())
+  name        String
+  completed   Boolean
+  completedAt DateTime?
+
+  personReport   PersonReport @relation(fields: [personReportId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  personReportId Int
+}
+
+model ScenarioProgress {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  grade             Int
+  completed         Boolean
+  totalTime         Float
+  criticalErrors    Int
+  nonCriticalErrors Int
+  runAt             DateTime
+
+  personReport   PersonReport @relation(fields: [personReportId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  personReportId Int
+}
