@@ -51,7 +51,7 @@ export default function PersonReport({
           }
         }
       >
-        downlaod the report
+        download the report
       </button>
       <div id='report'>
         <div className='flex m-6 justify-between'>
@@ -102,9 +102,7 @@ export default function PersonReport({
                   <td className={tableColumnClassName}>
                     {CBT.completed
                       ? moment(CBT.completedAt).format("YYYY-MM-DD HH:mm:ss")
-                      : CBT.completedAt
-                      ? moment(CBT.completedAt).format("YYYY-MM-DD HH:mm:ss")
-                      : "Not Completed"}
+                      : "N/A"}
                   </td>
                 </tr>
               ))}
