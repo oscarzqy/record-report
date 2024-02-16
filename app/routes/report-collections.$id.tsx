@@ -16,6 +16,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     return json({ personReports: [] });
   } else {
     const personReports = await getReportCollection(parseInt(params.id));
+    personReports.sort((r1: PersonReport, r2: PersonReport) =>
+      r1.personName < r2.personName ? -1 : 1
+    );
     return json({ personReports });
   }
 };
@@ -30,6 +33,7 @@ export default function ReportCollection() {
   const [lastSimTime, setlastSimTime] = useState<Date | null>(null);
   const [overallReport, setOverallReport] = useState<any>(null);
   const [showOverall, setShowOverall] = useState<boolean>(false);
+
   return (
     <>
       <Header />
