@@ -36,11 +36,13 @@ interface ScenarioProgress {
 }
 
 export async function getReportCollections() {
-  return prisma.reportCollection.findMany();
+  return prisma.reportCollection.findMany({ where: { deleted: false } });
 }
 
 export async function getReportCollection(collectionId: number) {
-  return prisma.personReport.findMany({ where: { collectionId } });
+  return prisma.personReport.findMany({
+    where: { collectionId },
+  });
 }
 
 export async function getPersonReport(personReportId: number) {
@@ -226,4 +228,23 @@ export async function createReportCollection(
       });
     }
   });
+}
+
+export async function deleteReportCollection(id: number) {
+  const updatedCollection = await prisma.reportCollection.update({
+    where: { id },
+    data: {
+      deleted: true,
+    },
+  });
+  if (updatedCollection && updatedCollection.deleted) {
+    return {
+      success: true,
+      message: "collection deleted",
+    };
+  }
+  return {
+    success: false,
+    message: "collection not deleted",
+  };
 }

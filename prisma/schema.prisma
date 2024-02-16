@@ -11,9 +11,10 @@ datasource db {
 }
 
 model ReportCollection {
-  id      Int    @id @default(autoincrement())
-  name    String @unique
+  id      Int     @id @default(autoincrement())
+  name    String
   rawData String
+  deleted Boolean @default(false)
 
   createdAt     DateTime       @default(now())
   personReports PersonReport[]
