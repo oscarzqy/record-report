@@ -19,7 +19,7 @@ export default function ReportCollections() {
         <h1 className='text-2xl text-gray-700 font-medium py-2 px-2'>
           Reports History
         </h1>
-        <ul className='border p-4 grid grid-flow-col auto-cols-max gap-10'>
+        <ul className='border p-4 flex flex-wrap gap-10'>
           {collections.map((collection) => (
             <li key={collection.id} className='grid-item'>
               <div className='flex gap-2'>
