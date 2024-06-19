@@ -66,7 +66,7 @@ export default function ReportCollection() {
             </li>
             {personReports.map((personReport, index) => {
               return (
-                <li key={personReport.id}>
+                <li key={personReport.id} className="break-words" >
                   <span>{index + 1}</span>
                   <p
                     className={`text-blue-500 underline px-2 cursor-pointer ${
