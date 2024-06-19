@@ -64,9 +64,16 @@ export default function ReportCollection() {
                 Overall
               </span>
             </li>
+            <li className='text-center'>
+              <input
+                type='text'
+                className=' border-blue-600 border-2 rounded px-2 text-lg w-full placeholder:text-lg'
+                placeholder='Search for the person/email...'
+              />
+            </li>
             {personReports.map((personReport, index) => {
               return (
-                <li key={personReport.id} className="break-words" >
+                <li key={personReport.id} className='break-words'>
                   <span>{index + 1}</span>
                   <p
                     className={`text-blue-500 underline px-2 cursor-pointer ${
