@@ -10,6 +10,7 @@ import {
 } from "@prisma/client";
 import PersonReportComponent from "./components/PersonReport";
 import OverallReportComponent from "./components/OverallReport";
+import fuzzysort from "fuzzysort";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   if (params.id == undefined) {
@@ -33,6 +34,7 @@ export default function ReportCollection() {
   const [lastSimTime, setlastSimTime] = useState<Date | null>(null);
   const [overallReport, setOverallReport] = useState<any>(null);
   const [showOverall, setShowOverall] = useState<boolean>(false);
+  const [displayPersons, setDisplayPersons] = useState(personReports);
 
   return (
     <>
@@ -69,22 +71,31 @@ export default function ReportCollection() {
                 type='text'
                 className=' border-blue-600 border-2 rounded px-2 text-lg w-full placeholder:text-lg'
                 placeholder='Search for the person/email...'
+                onChange={(e) => {
+                  const result = fuzzysort.go(e.target.value, personReports, {
+                    threshold: 0.5,
+                    keys: ["personName", "email"],
+                    all: true,
+                  });
+                  setDisplayPersons(result.map((person) => person.obj));
+                }}
               />
             </li>
-            {personReports.map((personReport, index) => {
+            {displayPersons.map((displayPersonReport, index) => {
               return (
-                <li key={personReport.id} className='break-words'>
+                <li key={displayPersonReport.id} className='break-words'>
                   <span>{index + 1}</span>
                   <p
                     className={`text-blue-500 underline px-2 cursor-pointer ${
-                      !showOverall && selectedPerson?.id == personReport.id
+                      !showOverall &&
+                      selectedPerson?.id == displayPersonReport.id
                         ? "ring-2 ring-pink-500 ring-inset"
                         : ""
                     }`}
                     onClick={async () => {
                       try {
                         const response = await fetch(
-                          `/api/report/${personReport.id}`,
+                          `/api/report/${displayPersonReport.id}`,
                           {
                             method: "GET",
                           }
@@ -92,7 +103,7 @@ export default function ReportCollection() {
                         const data = await response.json();
                         setCBTs(data.CBT);
                         setScenarios(data.Scenario);
-                        setSelectedPerson(personReport);
+                        setSelectedPerson(displayPersonReport);
                         setlastSimTime(data.lastSimTime);
                         setShowOverall(false);
                       } catch (error) {
@@ -100,9 +111,9 @@ export default function ReportCollection() {
                       }
                     }}
                   >
-                    {personReport.personName}
+                    {displayPersonReport.personName}
                   </p>
-                  <p className='px-2'>{personReport.email}</p>
+                  <p className='px-2'>{displayPersonReport.email}</p>
                 </li>
               );
             })}
