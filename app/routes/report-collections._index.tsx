@@ -12,6 +12,12 @@ export const loader = async () => {
 export default function ReportCollections() {
   const { reportCollections } = useLoaderData<typeof loader>();
   const [collections, setCollections] = useState(reportCollections);
+
+  const displayPatchCount = 20;
+  const [displayCollections, setDisplayCollections] = useState(
+    collections.slice(0, displayPatchCount)
+  );
+
   return (
     <>
       <Header />
@@ -20,7 +26,7 @@ export default function ReportCollections() {
           Reports History
         </h1>
         <ul className='border p-4 flex flex-wrap gap-10'>
-          {collections.map((collection) => (
+          {displayCollections.map((collection) => (
             <li key={collection.id} className='grid-item'>
               <div className='flex gap-2'>
                 <Link
@@ -89,6 +95,25 @@ export default function ReportCollections() {
             </li>
           ))}
         </ul>
+        {displayCollections.length < collections.length ? (
+          <div className='w-full flex justify-center'>
+            <button
+              className='text-slate-500 font-bold py-2 px-4 rounded bg-gradient-to-r from-white via-blue-200 to-white w-1/2 m-0'
+              onClick={() => {
+                setDisplayCollections(
+                  collections.slice(
+                    0,
+                    displayCollections.length + displayPatchCount
+                  )
+                );
+              }}
+            >
+              Show More
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );

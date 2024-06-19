@@ -36,7 +36,10 @@ interface ScenarioProgress {
 }
 
 export async function getReportCollections() {
-  return prisma.reportCollection.findMany({ where: { deleted: false } });
+  return prisma.reportCollection.findMany({
+    where: { deleted: false },
+    orderBy: { createdAt: "desc" },
+  });
 }
 
 export async function getReportCollection(collectionId: number) {
